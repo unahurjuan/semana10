@@ -1,0 +1,22 @@
+import Marcas.*
+import Personas.*
+import Carpas.*
+
+describe "testPrimero" {
+	const hofbrau = new MarcaRoja(lupuloPorLitro = 10, pais = "Alemania")
+	const j1 = new Jarras(litros = 0.5, marca = hofbrau)
+	const pa1 = new Aleman(peso = 70, jarrasTomadas = [j1, j1], leGustaTradicional = true, nivelDeAguante = 10)
+	
+	test "contenidoDeAlcoholDeJarra" {
+		assert.that(j1.alcohol() == 0.05)
+	}
+	test "totalDeAcoholIngerido" {
+		assert.that(pa1.alcoholIngerido() == 0.1)
+	}
+	test "estaEbrio" {
+		assert.that(!pa1.estaEbria())		
+	}
+	test "leGusta" {
+		assert.that(pa1.leGustaCerveza(hofbrau))
+	}
+}
