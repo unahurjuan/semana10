@@ -1,0 +1,82 @@
+import Marcas.*
+import Personas.*
+import Carpas.*
+
+
+describe "test segunda parte" {
+	const hofbrau = new MarcaRoja(lupuloPorLitro = 10, pais = "Belga")
+	const corona = new MarcaRubia(lupuloPorLitro = 3, pais = "Checo",graduacion=4)
+	const guiness = new MarcaNegra(lupuloPorLitro = 20, pais = "Aleman")
+	const carp1=new Carpa(limiteDePersonas=30,personasEnCarpa=[],bandaMusical=true,marca=hofbrau)
+	const carp2=new Carpa(limiteDePersonas=45,personasEnCarpa=[],bandaMusical=false,marca=corona)
+	const carp3=new Carpa(limiteDePersonas=45,personasEnCarpa=[],bandaMusical=false,marca=guiness)	
+	const joaquin = new Aleman(peso = 70, leGustaTradicional = true, nivelDeAguante = 10)
+	const juan = new Checo(peso = 50, leGustaTradicional = true, nivelDeAguante = 30)
+	const pepita = new Belga(peso = 50, leGustaTradicional = true, nivelDeAguante = 15)
+	const aldana = new Belga(peso = 120, leGustaTradicional = true, nivelDeAguante = 5)
+	const gonzalito = new Belga(peso = 79, leGustaTradicional = false, nivelDeAguante = 15)
+	
+	test "aldana le gusta la cerveza"{
+		assert.that(aldana.leGustaCerveza(guiness))
+		assert.notThat(aldana.leGustaCerveza(corona))
+	}
+	
+	test "juan le gusta la cerveza"{
+		assert.that(juan.leGustaCerveza(hofbrau))
+		assert.notThat(juan.leGustaCerveza(corona))
+	}
+	
+	test "joaquin le gusta la cerveza"{
+		assert.that(joaquin.leGustaCerveza(guiness))
+		assert.that(joaquin.leGustaCerveza(corona))
+		assert.that(joaquin.leGustaCerveza(hofbrau))
+	}
+	
+	test "gon le gusta la cerveza"{
+		assert.that(gonzalito.leGustaCerveza(guiness))
+	}
+	test "carpas a las que quieren entrar"{
+		assert.notThat(joaquin.quiereEntrarEnCarpa(carp3))
+		assert.that(juan.quiereEntrarEnCarpa(carp1))
+		assert.notThat(juan.quiereEntrarEnCarpa(carp2))
+	}
+	
+	test "pueden entrar"{
+		assert.that(pepita.puedeEntrarEnCarpa(carp1))
+		assert.notThat(pepita.puedeEntrarEnCarpa(carp2))
+		assert.that(gonzalito.puedeEntrarEnCarpa(carp3))
+	}
+	test "entran a carp1,se emborrachan y salen los ebrios empedernidos"{
+		pepita.entrarEnCarpa(carp1)
+		juan.entrarEnCarpa(carp1)
+		joaquin.entrarEnCarpa(carp1)
+		aldana.entrarEnCarpa(carp1)
+		carp1.venderJarra(pepita, 1000000)
+		carp1.venderJarra(aldana, 1000000)
+		carp1.venderJarra(joaquin, 0.5)
+		carp1.venderJarra(joaquin, 10000000)
+		assert.notThat(juan.estaEbria())
+		assert.that(joaquin.estaEbria())
+		assert.that(pepita.estaEbria())
+		assert.that(aldana.estaEbria())
+		assert.equals([pepita,joaquin,aldana],carp1.todosLosEbrios())
+		assert.equals(2,carp1.todosLosEbriosEmpedernidos())
+	}
+	
+	test"son patriotas"{
+		gonzalito.entrarEnCarpa(carp3)
+		carp3.venderJarra(gonzalito, 1000000)
+		assert.notThat(gonzalito.esPatriota())
+		juan.entrarEnCarpa(carp1)
+		carp1.venderJarra(juan, 1)
+		assert.notThat(juan.esPatriota())
+		pepita.entrarEnCarpa(carp1)
+		carp1.venderJarra(pepita,2)
+		assert.that(pepita.esPatriota())
+		joaquin.entrarEnCarpa(carp1)
+		carp1.venderJarra(joaquin, 2)
+		assert.notThat(joaquin.esPatriota())
+	}
+}
+
+
